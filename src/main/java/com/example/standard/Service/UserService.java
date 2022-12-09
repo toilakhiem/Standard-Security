@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,10 +22,12 @@ import java.util.Set;
 public class UserService implements UserServiceInterface,UserDetailsService {
     @Autowired
     private UserRepository repository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public void saveUser(User user) {
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        repository.save(user);
     }
 
     @Override
@@ -41,6 +44,8 @@ public class UserService implements UserServiceInterface,UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
+        user.getUsername();
+        user.getRoles();
         if(user == null) throw new UsernameNotFoundException("User not found in database");
         Set<GrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(

@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +22,14 @@ public class JwtUtils {
     private static final int expireTime = 600000; // 10 min
 
     public Map<String, String> generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         String access_token = JWT.create()
-                .withSubject(userDetails.getUsername())
+                .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expireTime))
-                .withClaim("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(ALGORITHM);
         String refresh_token = JWT.create()
-                .withSubject(userDetails.getUsername())
+                .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 300000000))
                 .sign(ALGORITHM);
         Map<String, String> tokens = new HashMap<>();
@@ -43,6 +44,7 @@ public class JwtUtils {
         Arrays.stream(roles).forEach(role ->{
             authorities.add(new SimpleGrantedAuthority(role));
         });
+        authorities.size();
         return authorities;
     }
     public boolean validateToken(String token) {

@@ -35,4 +35,14 @@ public class User {
     )
     @JsonBackReference
     private Set<Role> roles;
+
+    public User(String username, String password, String fisrtname, String lastname) {
+        this.username = username;
+        this.password = password;
+        this.fisrtname = fisrtname;
+        this.lastname = lastname;
+    }
+
+    public User() {
+    }
 }
