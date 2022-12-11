@@ -44,8 +44,6 @@ public class UserService implements UserServiceInterface,UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        user.getUsername();
-        user.getRoles();
         if(user == null) throw new UsernameNotFoundException("User not found in database");
         Set<GrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(

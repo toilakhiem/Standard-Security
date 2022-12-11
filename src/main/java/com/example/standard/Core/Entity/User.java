@@ -30,8 +30,8 @@ public class User {
     private String lastname;
     @ManyToMany
     @JoinTable(
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @JsonBackReference
     private Set<Role> roles;

@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@Getter
 public class JwtUtils {
     private static final String key = "keynaylabimatcuakhiem171222@gmail.com";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(key.getBytes());
@@ -44,7 +44,6 @@ public class JwtUtils {
         Arrays.stream(roles).forEach(role ->{
             authorities.add(new SimpleGrantedAuthority(role));
         });
-        authorities.size();
         return authorities;
     }
     public boolean validateToken(String token) {
